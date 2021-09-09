@@ -1,0 +1,47 @@
+{
+  "name": "bmd-esap",
+  "version": "1.0.0",
+  "description": "Every Step a Project",
+  "main": "src/index.mjs",
+  "type": "module",
+  "scripts": {
+    "loop": "npx nodemon -r dotenv-safe/config src/index.mjs",
+    "start": "npx rollup -c && node -r dotenv-safe/config src/index.mjs",
+    "test": "npx jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeCorben/bmd-esap.git"
+  },
+  "author": "DeCorben",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DeCorben/bmd-esap/issues"
+  },
+  "homepage": "https://github.com/DeCorben/bmd-esap#readme",
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.4",
+    "@babel/preset-react": "^7.14.5",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
+    "@rollup/plugin-replace": "^3.0.0",
+    "@types/html-minifier": "^4.0.1",
+    "jest": "^27.1.0",
+    "nodemon": "^2.0.12",
+    "rollup": "^2.56.3",
+    "rollup-plugin-cleaner": "^1.0.0",
+    "rollup-plugin-html2": "^3.0.1"
+  },
+  "dependencies": {
+    "axios": "^0.21.4",
+    "dotenv-safe": "^8.2.0",
+    "fastify": "^3.20.2",
+    "fastify-static": "^4.2.3",
+    "flat": "^5.0.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}
