@@ -10,6 +10,11 @@ class Fetcher extends React.Component {
             output: 'Default placeholder',
         };
     };
+    changer = (change)=>{
+        let name = change.target.name,
+            value = change.target.value
+        this.setState({[name]:value})
+    };
     componentDidMount = () => {
         this.fetch();
     };
@@ -18,8 +23,8 @@ class Fetcher extends React.Component {
             .then((res) => res.data)
             .then((raw) => {
                 if (Array.isArray(raw)) {
-                    return (<ul>{raw.map((v) => {
-                        return (<li>{v}</li>);
+                    return (<ul>{raw.map((v, i) => {
+                        return (<li key={i}>{v}</li>);
                     })}</ul>);
                 }
                 if (raw != null && typeof raw === 'object') {
@@ -36,6 +41,14 @@ class Fetcher extends React.Component {
             });
     };
     render = () => (<div>
+        <div>
+            <button onClick={this.fetch}>Fetch</button>
+            <input type="text"
+                name="endpoint"
+                value={this.state.endpoint}
+                onChange={this.changer}
+            />
+        </div>
         {this.state.output}
         <br/>{this.state.endpoint}
     </div>);
@@ -43,7 +56,7 @@ class Fetcher extends React.Component {
 
 ReactDOM.render(
     <div>
-        <Fetcher endpoint="esap/nest" />
+        <Fetcher endpoint="esap/flat" />
     </div>,
     document.getElementById('root')
 );

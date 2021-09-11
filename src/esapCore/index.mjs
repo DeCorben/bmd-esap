@@ -13,12 +13,12 @@ const core = {
                 return flatten(proj);
             })
             //filtering on non-object steps leaves out important context
-            /* .then((flat) => {
-                return Object.fromEntries(Object.entries(flat).filter((v) => v[0].match(/.*steps\.\d+$/)));
-            }) */
+            .then((flat) => {
+                return Object.fromEntries(Object.entries(flat).filter((v) => v[0].match(/.*steps\.\d+(.name)?$/)));
+            })
             .then((thin) => {
                 return Object.keys(thin).map((v) => {
-                    return `${v}:${thin[v]}`;
+                    return `${thin[v]}`;
                 })
             }),
     nest: async ()=> transcribe(),
