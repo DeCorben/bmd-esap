@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import axios from 'axios';
+import JSONPretty from 'react-json-pretty';
 
 class Fetcher extends React.Component {
     constructor(props) {
@@ -28,8 +29,7 @@ class Fetcher extends React.Component {
                     })}</ul>);
                 }
                 if (raw != null && typeof raw === 'object') {
-                    return JSON.stringify(raw,null,'\t');
-                    //created nested list from object
+                    return (<JSONPretty data={raw} />);
                 }
                 return raw;
             })

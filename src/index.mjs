@@ -19,8 +19,8 @@ fastify()
             });
     }))
     .then((server) => server.get('/esap/nest', (req, res) => {
-        esap.next()
-            .then((next) => {
+        esap.nest()
+            .then((nest) => {
                 res.send(nest);
             })
     }))

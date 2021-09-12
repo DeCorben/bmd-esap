@@ -12,7 +12,6 @@ const core = {
             .then((proj) => {
                 return flatten(proj);
             })
-            //filtering on non-object steps leaves out important context
             .then((flat) => {
                 return Object.fromEntries(Object.entries(flat).filter((v) => v[0].match(/.*steps\.\d+(.name)?$/)));
             })
