@@ -7,6 +7,7 @@ class Fetcher extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            address: props.address || '',
             endpoint: props.endpoint || '',
             output: 'Default placeholder',
         };
@@ -37,20 +38,34 @@ class Fetcher extends React.Component {
                 this.setState({ output: data });
             })
             .catch((err) => {
-                this.setState({ output: JSON.stringify(err,null,'\t') });
+                this.setState({ output: (<JSONPretty data={err}/>) });
             });
     };
+    post = ()=> {
+        axios.post(this.state.endpoint, JSON.parse(this.state.address))
+            .then((res) => {
+                this.setState({ output: (<JSONPretty data={res.data}/>) });
+            })
+            .catch((err) => {
+                this.setState({ output: (<JSONPretty data={err}/>) });
+            });
+    }
     render = () => (<div>
         <div>
-            <button onClick={this.fetch}>Fetch</button>
+            <button onClick={this.fetch}>Get</button>&nbsp;&nbsp;
             <input type="text"
                 name="endpoint"
                 value={this.state.endpoint}
                 onChange={this.changer}
+            />&nbsp;&nbsp;&nbsp;&nbsp;
+            <button onClick={this.post}>Post</button>&nbsp;&nbsp;
+            <input type="text"
+                name="address"
+                value={this.state.address}
+                onChange={this.changer}
             />
         </div>
         {this.state.output}
-        <br/>{this.state.endpoint}
     </div>);
 }
 
