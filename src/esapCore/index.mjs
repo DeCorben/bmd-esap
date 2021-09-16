@@ -2,6 +2,9 @@ import path from 'path';
 import fs from 'fs/promises';
 import flatten from 'flat';
 
+const burn = (data) => {
+    return fs.writeFile(projFile,JSON.stringify(data,null,'  '))
+};
 const follow = (address,chart) => {
     let house = chart;
     for (const n of address) {
@@ -38,7 +41,15 @@ const mapSteps = (proj) => {
     // this really shouldn't happen
     return null;
 };
-const transcribe = async () => fs.readFile(path.join(path.dirname('.'),'../../Making/picnic.json'))
+const projFile = path.join(path.dirname('.'),'../../Making/picnic.json');
+const surfaceTools = (obj) => {
+    let tools = Object.entries(flatten(obj))
+        .filter((v) => v[0].match(/.+tools.*/))
+        .map((v) => v[1]);
+    obj.tools = [...new Set(tools)];
+    return obj;
+};
+const transcribe = () => fs.readFile(projFile)
     .then((buffer) => {
         return JSON.parse(buffer.toString());
     });
@@ -85,7 +96,6 @@ const core = {
             return bits.join(';');
         });
         let pos = list.indexOf(address.join(';'));
-        // handle not found condition (or prevent it)
         if (list.length-1 >= pos+1) {
             pos += 1;
         }
@@ -94,9 +104,11 @@ const core = {
             sub: follow(list[pos].split(';'),base),
         };
     },
-    tools: ()=> {
+    tools: async ()=> {
         // aggregate tools to top level
-        return 'Not yet';
+        let proj = surfaceTools(await transcribe());
+        burn(proj);
+        return proj;
     },
 };
 

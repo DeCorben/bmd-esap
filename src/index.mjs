@@ -32,5 +32,9 @@ fastify()
         esap.compound()
             .then((answer) => { res.send(answer) });
     }))
+    .then((server) => server.get('/esap/tools', (req,res) => {
+        esap.tools()
+            .then((answer) => { res.send(answer) });
+    }))
     .then((server) => server.listen(process.env.PORT))
     .then(() => {console.log(`${process.env.APPNAME} listening on port ${process.env.PORT}`);});
