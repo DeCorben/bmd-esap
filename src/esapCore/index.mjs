@@ -68,18 +68,31 @@ const core = {
     point: async (address) => {
         let invalid = invalidAddress(address);
         if (invalid) { return invalid; };
-        return follow(address, await transcribe());
+        return {
+            address: address.join(';'),
+            sub: follow(address, await transcribe()),
+        };
     },
     step: async (address) => {
         // next from supplied address
         let invalid = invalidAddress(address);
         if (invalid) { return invalid; };
-        let coor = address;
         let base = await transcribe();
-        let current = follow(coor, base);
-        if (current.steps) { return current.steps[0] };
-        coor.pop();
-        return 'Unfinished';
+        let list = mapSteps(base).map((v) => {
+            let bits = v.split(';');
+            bits.shift();
+            bits.pop();
+            return bits.join(';');
+        });
+        let pos = list.indexOf(address.join(';'));
+        // handle not found condition (or prevent it)
+        if (list.length-1 >= pos+1) {
+            pos += 1;
+        }
+        return {
+            address: list[pos],
+            sub: follow(list[pos].split(';'),base),
+        };
     },
     tools: ()=> {
         // aggregate tools to top level
