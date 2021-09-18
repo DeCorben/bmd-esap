@@ -42,6 +42,24 @@ const mapSteps = (proj) => {
     return null;
 };
 const projFile = path.join(path.dirname('.'),'../../Making/picnic.json');
+const surfaceMaterials = (obj) => {
+    // this algorithm begs for optimization
+    var mats = Object.entries(flatten(obj))
+    .filter((v) => v[0].match(/.+materials.*/))
+    .map((v) => v[1])
+    mats.sort();
+    mats = mats.filter((v) => !(v.match(/.*\([A-Z]\).*/) || v.match(/assembly/)));
+    let count = {};
+    mats.forEach((v => {
+        if (count[v]) {
+            count[v] += 1;
+        } else {
+            count[v] = 1;
+        }
+    }));
+    obj.materials = Object.keys(count).map((v) => `${v}:${count[v]}`);
+    return obj;
+};
 const surfaceTools = (obj) => {
     let tools = Object.entries(flatten(obj))
         .filter((v) => v[0].match(/.+tools.*/))
@@ -57,7 +75,7 @@ const transcribe = () => fs.readFile(projFile)
 const core = {
     compound: async () => {
         // compound/addressed flat list
-        return mapSteps(await transcribe());
+        return { flat: mapSteps(await transcribe()) };
     },
     flat: async () => transcribe()
             .then((proj) => {
@@ -70,10 +88,13 @@ const core = {
                 return Object.keys(thin).map((v) => {
                     return `${thin[v]}`;
                 })
-            }),
-    materials: ()=> {
+            })
+            .then((thin) => ({ flat: thin })),
+    materials: async ()=> {
         // aggregate materials list to top level
-        return 'Not yet';
+        let proj = surfaceMaterials(await transcribe());
+        burn(proj);
+        return proj;
     },
     nest: async ()=> transcribe(),
     point: async (address) => {

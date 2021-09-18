@@ -24,15 +24,7 @@ class Fetcher extends React.Component {
         axios.get(this.state.endpoint)
             .then((res) => res.data)
             .then((raw) => {
-                if (Array.isArray(raw)) {
-                    return (<ul>{raw.map((v, i) => {
-                        return (<li key={i}>{v}</li>);
-                    })}</ul>);
-                }
-                if (raw != null && typeof raw === 'object') {
-                    return (<JSONPretty data={raw} />);
-                }
-                return raw;
+                return (<JSONPretty data={raw} />);
             })
             .then((data) => {
                 this.setState({ output: data });
